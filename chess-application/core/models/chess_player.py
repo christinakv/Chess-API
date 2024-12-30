@@ -1,13 +1,17 @@
+from sqlalchemy.orm import Mapped
+from sqlalchemy.testing.schema import mapped_column
+
 from .base import Base
 from sqlalchemy import Column, Integer, String
 
 class ChessPlayer(Base):
     __tablename__ = 'chess_players'
 
-    chess_player_fide_id = Column(Integer, primary_key=True, autoincrement=True)
-    first_name = Column(String, nullable=False)
-    last_name = Column(String, nullable=False)
-    country = Column(String, nullable=False)
-    world_rank = Column(String, nullable=False)
-    rating_std = Column(Integer, nullable=False)
-    fide_title = Column(String, nullable=False)
+    chess_player_id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    first_name: Mapped[str] = mapped_column(nullable=False)
+    last_name: Mapped[str] = mapped_column(nullable=False)
+    country: Mapped[str] = mapped_column(nullable=False)
+    world_rank: Mapped[str] = mapped_column(nullable=False)
+    rating: Mapped[int] = mapped_column(nullable=False)
+    title: Mapped[str] = mapped_column(nullable=False)
+
