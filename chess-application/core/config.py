@@ -1,24 +1,33 @@
 from pydantic import BaseModel
 from pydantic import PostgresDsn
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class RunConfig(BaseModel):
     host: str = "0.0.0.0"
     port: int = 8000
 
-class APIPrefixConfig(BaseModel):
+class APIPrefix(BaseModel):
     prefix: str = "/api"
 
 class DatabaseConfig(BaseModel):
-    url: PostgresDsn
+    url: PostgresDsn = "postgresql+asyncpg://postgres:postgres@localhost:5432/postgres"
     echo: bool = False
     echo_pool: bool = False
-    pool_size: int = 50
+    pool_size: int = 5
     max_overflow: int = 10
 
 class Settings(BaseSettings):
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        case_sensitive=False,
+        env_nested_delimiter="__",
+        env_prefix="CHESS__"
+    )
     run: RunConfig = RunConfig()
-    api: APIPrefixConfig = APIPrefixConfig()
-    db: DatabaseConfig = DatabaseConfig()
+    api: APIPrefix = APIPrefix()
+    db: DatabaseConfig = DatabaseConfig(
+        url="postgresql+asyncpg://postgres:postgres@localhost:5432/postgres"
+    )
 
 settings = Settings()
+print(settings.db.url)
