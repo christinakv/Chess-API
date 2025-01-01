@@ -7,7 +7,7 @@ from sqlalchemy import Column, Integer, String
 class Tournament(Base):
     __tablename__ = 'tournaments'
 
-    tournament_id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    tournament_id: Mapped[int] = mapped_column(unique=True, primary_key=False)
     tournament_name: Mapped[str] = mapped_column(nullable=False)
     country: Mapped[str] = mapped_column(nullable=False)
     city: Mapped[str] = mapped_column(nullable=False)
