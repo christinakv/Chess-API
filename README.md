@@ -27,7 +27,6 @@ A **FastAPI** application that uses **SQLAlchemy** and **PostgreSQL** to manage 
 3. [Usage](#usage)  
 4. [API Endpoints](#api-endpoints)  
 5. [Project Structure](#project-structure)  
-6. [Contributing](#contributing)
 
 ---
 
