@@ -1,32 +1,33 @@
-import psycopg2
-from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 
-DB_NAME = "chess_tournaments"
-DB_USER = "postgres"
-DB_PASSWORD = "password"
-DB_HOST = "localhost"
-DB_PORT = "5432"
+from core.config import DATABASE_URL
 
-def initialize_database():
-    try:
-        conn = psycopg2.connect(
-            dbname="postgres",
-            user=DB_USER,
-            password=DB_PASSWORD,
-            host=DB_HOST,
-            port=DB_PORT
-        )
-        conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-        cursor = conn.cursor()
+# Create the engine using SQLAlchemy
+engine = create_engine(DATABASE_URL)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-        cursor.execute(f"DROP DATABASE IF EXISTS {DB_NAME}")
-        cursor.execute(f"CREATE DATABASE {DB_NAME} OWNER {DB_USER}")
+Base = declarative_base()
 
-        print(f"Database '{DB_NAME}' created successfully.")
-        cursor.close()
-        conn.close()
-    except Exception as e:
-        print(f"Error initializing database: {e}")
+
+def init_db():
+    Base.metadata.drop_all(engine)
+
+    Base.metadata.create_all(engine)
+
+
+def is_db_empty(db_session):
+    from sqlalchemy import inspect
+    inspector = inspect(db_session.bind)
+    return not inspector.get_table_names()
+
 
 if __name__ == "__main__":
-    initialize_database()
+    with SessionLocal() as db:
+        if not is_db_empty(db):
+            print("Database already exists, skipping initialization.")
+        else:
+            print("Initializing database...")
+            init_db()
+            print("Database initialized successfully!")

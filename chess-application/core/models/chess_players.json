@@ -1,0 +1,182 @@
+[
+  {
+    "chess_player_id": 1503014,
+    "first_name": "Magnus",
+    "last_name": "Carlsen",
+    "country": "Norway",
+    "world_rank": 1,
+    "rating": 2831,
+    "title": "Grandmaster"
+  },
+  {
+    "chess_player_id": 2020009,
+    "first_name": "Fabiano",
+    "last_name": "Caruana",
+    "country": "United States of America",
+    "world_rank": 2,
+    "rating": 2803,
+    "title": "Grandmaster"
+  },
+  {
+    "chess_player_id": 2016192,
+    "first_name": "Hikaru",
+    "last_name": "Nakamura",
+    "country": "United States of America",
+    "world_rank": 3,
+    "rating": 2802,
+    "title": "Grandmaster"
+  },
+  {
+    "chess_player_id": 35009192,
+    "first_name": "Arjun",
+    "last_name": "Erigaisi",
+    "country": "India",
+    "world_rank": 4,
+    "rating": 2801,
+    "title": "Grandmaster"
+  },
+  {
+    "chess_player_id": 46616543,
+    "first_name": "Gukesh",
+    "last_name": "D",
+    "country": "India",
+    "world_rank": 5,
+    "rating": 2777,
+    "title": "Grandmaster"
+  },
+  {
+    "chess_player_id": 14204118,
+    "first_name": "Nodirbek",
+    "last_name": "Abdusattorov",
+    "country": "Uzbekistan",
+    "world_rank": 6,
+    "rating": 2768,
+    "title": "Grandmaster"
+  },
+  {
+    "chess_player_id": 12573981,
+    "first_name": "Alireza",
+    "last_name": "Firouzja",
+    "country": "France",
+    "world_rank": 7,
+    "rating": 2763,
+    "title": "Grandmaster"
+  },
+  {
+    "chess_player_id": 4168119,
+    "first_name": "Ian",
+    "last_name": "Nepomniachtchi",
+    "country": "Russia",
+    "world_rank": 8,
+    "rating": 2754,
+    "title": "Grandmaster"
+  },
+  {
+    "chess_player_id": 8603405,
+    "first_name": "Yi",
+    "last_name": "Wei",
+    "country": "China",
+    "world_rank": 9,
+    "rating": 2754,
+    "title": "Grandmaster"
+  },
+  {
+    "chess_player_id": 5000017,
+    "first_name": "Viswanathan",
+    "last_name": "Anand",
+    "country": "India",
+    "world_rank": 10,
+    "rating": 2750,
+    "title": "Grandmaster"
+  },
+  {
+    "chess_player_id": 13300474,
+    "first_name": "Levon",
+    "last_name": "Aronian",
+    "country": "United States of America",
+    "world_rank": 11,
+    "rating": 2747,
+    "title": "Grandmaster"
+  },
+  {
+    "chess_player_id": 5202213,
+    "first_name": "Wesley",
+    "last_name": "So",
+    "country": "United States of America",
+    "world_rank": 12,
+    "rating": 2747,
+    "title": "Grandmaster"
+  },
+  {
+    "chess_player_id": 25059530,
+    "first_name": "Praggnanandhaa",
+    "last_name": "R",
+    "country": "India",
+    "world_rank": 13,
+    "rating": 2741,
+    "title": "Grandmaster"
+  },
+  {
+    "chess_player_id": 3503240,
+    "first_name": "Leinier",
+    "last_name": "Dominguez Perez",
+    "country": "United States of America",
+    "world_rank": 14,
+    "rating": 2741,
+    "title": "Grandmaster"
+  },
+  {
+    "chess_player_id": 1170546,
+    "first_name": "Jan-Krzysztof",
+    "last_name": "Duda",
+    "country": "Poland",
+    "world_rank": 15,
+    "rating": 2740,
+    "title": "Grandmaster"
+  },
+  {
+    "chess_player_id": 12401137,
+    "first_name": "Quang Liem",
+    "last_name": "Le",
+    "country": "Vietnam",
+    "world_rank": 16,
+    "rating": 2739,
+    "title": "Grandmaster"
+  },
+  {
+    "chess_player_id": 8603677,
+    "first_name": "Liren",
+    "last_name": "Ding",
+    "country": "China",
+    "world_rank": 17,
+    "rating": 2734,
+    "title": "Grandmaster"
+  },
+  {
+    "chess_player_id": 2093596,
+    "first_name": "Hans Moke",
+    "last_name": "Niemann",
+    "country": "United States of America",
+    "world_rank": 18,
+    "rating": 2734,
+    "title": "Grandmaster"
+  },
+  {
+    "chess_player_id": 623539,
+    "first_name": "Maxime",
+    "last_name": "Vachier-Lagrave",
+    "country": "France",
+    "world_rank": 19,
+    "rating": 2733,
+    "title": "Grandmaster"
+  },
+  {
+    "chess_player_id": 12940690,
+    "first_name": "Vincent",
+    "last_name": "Keymer",
+    "country": "Germany",
+    "world_rank": 20,
+    "rating": 2733,
+    "title": "Grandmaster"
+  }
+]

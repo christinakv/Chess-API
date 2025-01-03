@@ -11,4 +11,3 @@ class Participant(Base):
     tournament_id: Mapped[int] = mapped_column(ForeignKey('tournaments.tournament_id'))
     chess_player_id: Mapped[int] = mapped_column(ForeignKey('chess_players.chess_player_id'))
     place: Mapped[int] = mapped_column(nullable=False)
-    place: Mapped[int] = mapped_column(nullable=False)

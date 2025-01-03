@@ -1,46 +1,14 @@
-from collections.abc import AsyncGenerator
-from sqlalchemy.ext.asyncio import (
-    create_async_engine,
-    AsyncEngine,
-    async_sessionmaker,
-    AsyncSession)
-
+# core/models/db_helper.py
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
+from sqlalchemy.orm import sessionmaker
 from core.config import settings
 
-class DatabaseHelper:
-    def __init__(
-            self,
-            url: str,
-            echo: bool = False,
-            echo_pool: bool = False,
-            pool_size: int = 5,
-            max_overflow: int = 10
-    ) -> None:
-        self.engine: AsyncEngine = create_async_engine(
-            url=url,
-            echo=echo,
-            echo_pool=echo_pool,
-            pool_size=pool_size,
-            max_overflow=max_overflow
-        )
-        self.session_factory: async_sessionmaker[AsyncSession] = async_sessionmaker(
-            bind=self.engine,
-            autoflush=False,
-            autocommit=False,
-            expire_on_commit=False
-        )
+async def get_db_session():
+    """Creates an asynchronous database session."""
 
-    async def dispose(self) -> None:
-        await self.engine.dispose()
-
-    async def session_getter(self) -> AsyncGenerator[AsyncSession, None]:
-        async with self.session_factory() as session:
-            yield session
-
-db_helper = DatabaseHelper(
-    url = str(settings.db.url),
-    echo = settings.db.echo,
-    echo_pool=settings.db.echo_pool,
-    pool_size=settings.db.pool_size,
-    max_overflow=settings.db.max_overflow
-)
+    engine = create_async_engine(settings.DATABASE_URL, echo=settings.DEBUG)
+    AsyncSessionLocal = sessionmaker(
+        bind=engine, class_=AsyncSession, expire_on_commit=False
+    )
+    async with AsyncSessionLocal() as session:
+        yield session

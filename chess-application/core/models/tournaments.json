@@ -1,0 +1,82 @@
+[
+  {
+    "tournament_id": 1,
+    "tournament_name": "FIDE World Blitz Chess Championship 2024",
+    "country": "USA",
+    "city": "New York",
+    "date": "2024-12-28 to 2024-12-31",
+    "qualification": "Open to all players"
+  },
+  {
+    "tournament_id": 2,
+    "tournament_name": "Grand Chess Tour 2024",
+    "country": "Various",
+    "city": "Various",
+    "date": "2024-05-06 to 2024-08-31",
+    "qualification": "Invitation only"
+  },
+  {
+    "tournament_id": 3,
+    "tournament_name": "Champions Chess Tour 2024",
+    "country": "Online",
+    "city": "Online",
+    "date": "2024-01-26 to 2024-12-21",
+    "qualification": "Invitation only"
+  },
+  {
+    "tournament_id": 4,
+    "tournament_name": "Groningen Chess Festival 2024",
+    "country": "Netherlands",
+    "city": "Groningen",
+    "date": "2024-12-20 to 2024-12-30",
+    "qualification": "Open to all players"
+  },
+  {
+    "tournament_id": 5,
+    "tournament_name": "Ukrainian Chess Championship 2024",
+    "country": "Ukraine",
+    "city": "Kyiv",
+    "date": "2024-12-13 to 2024-12-24",
+    "qualification": "Open to Ukrainian players"
+  },
+  {
+    "tournament_id": 6,
+    "tournament_name": "Sunway Sitges Chess Festival 2024",
+    "country": "Spain",
+    "city": "Sitges",
+    "date": "2024-12-01 to 2024-12-10",
+    "qualification": "Open to all players"
+  },
+  {
+    "tournament_id": 7,
+    "tournament_name": "Chicago Open 2024",
+    "country": "USA",
+    "city": "Chicago",
+    "date": "2024-05-23 to 2024-05-26",
+    "qualification": "Open to all players"
+  },
+  {
+    "tournament_id": 8,
+    "tournament_name": "Cleveland Open 2024",
+    "country": "USA",
+    "city": "Cleveland",
+    "date": "2024-06-07 to 2024-06-09",
+    "qualification": "Open to all players"
+  },
+  {
+    "tournament_id": 9,
+    "tournament_name": "Continental Open 2024",
+    "country": "USA",
+    "city": "Chicago",
+    "date": "2024-08-15 to 2024-08-18",
+    "qualification": "Open to all players"
+  },
+  {
+    "tournament_id": 10,
+    "tournament_name": "Eastern Chess Congress 2024",
+    "country": "USA",
+    "city": "Philadelphia",
+    "date": "2024-10-25 to 2024-10-27",
+    "qualification": "Open to all players"
+  }
+]

@@ -15,3 +15,17 @@ class ChessPlayerResponse(ChessPlayerCreate):
 
     class Config:
         orm_mode = True
+
+class ParticipantCreate(BaseModel):
+    participant_id: int
+    tournament_id: int
+    chess_player_id: int
+    place: int
+
+class TournamentCreate(BaseModel):
+    tournament_id: int
+    tournament_name: str
+    country: str
+    city: str
+    date: str
+    qualification: str

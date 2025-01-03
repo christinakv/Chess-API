@@ -1,0 +1,122 @@
+[
+  {
+    "participant_id": 1,
+    "tournament_id": 1,
+    "chess_player_id": 1503014,
+    "place": 1
+  },
+  {
+    "participant_id": 2,
+    "tournament_id": 1,
+    "chess_player_id": 2020009,
+    "place": 2
+  },
+  {
+    "participant_id": 3,
+    "tournament_id": 1,
+    "chess_player_id": 2016192,
+    "place": 3
+  },
+  {
+    "participant_id": 4,
+    "tournament_id": 1,
+    "chess_player_id": 35009192,
+    "place": 4
+  },
+  {
+    "participant_id": 5,
+    "tournament_id": 1,
+    "chess_player_id": 46616543,
+    "place": 5
+  },
+  {
+    "participant_id": 6,
+    "tournament_id": 2,
+    "chess_player_id": 1503014,
+    "place": 1
+  },
+  {
+    "participant_id": 7,
+    "tournament_id": 2,
+    "chess_player_id": 2020009,
+    "place": 2
+  },
+  {
+    "participant_id": 8,
+    "tournament_id": 2,
+    "chess_player_id": 2016192,
+    "place": 3
+  },
+  {
+    "participant_id": 9,
+    "tournament_id": 2,
+    "chess_player_id": 35009192,
+    "place": 4
+  },
+  {
+    "participant_id": 10,
+    "tournament_id": 2,
+    "chess_player_id": 46616543,
+    "place": 5
+  },
+  {
+    "participant_id": 11,
+    "tournament_id": 3,
+    "chess_player_id": 1503014,
+    "place": 1
+  },
+  {
+    "participant_id": 12,
+    "tournament_id": 3,
+    "chess_player_id": 2020009,
+    "place": 2
+  },
+  {
+    "participant_id": 13,
+    "tournament_id": 3,
+    "chess_player_id": 2016192,
+    "place": 3
+  },
+  {
+    "participant_id": 14,
+    "tournament_id": 3,
+    "chess_player_id": 35009192,
+    "place": 4
+  },
+  {
+    "participant_id": 15,
+    "tournament_id": 3,
+    "chess_player_id": 46616543,
+    "place": 5
+  },
+  {
+    "participant_id": 16,
+    "tournament_id": 4,
+    "chess_player_id": 1503014,
+    "place": 1
+  },
+  {
+    "participant_id": 17,
+    "tournament_id": 4,
+    "chess_player_id": 2020009,
+    "place": 2
+  },
+  {
+    "participant_id": 18,
+    "tournament_id": 4,
+    "chess_player_id": 2016192,
+    "place": 3
+  },
+  {
+    "participant_id": 19,
+    "tournament_id": 4,
+    "chess_player_id": 35009192,
+    "place": 4
+  },
+  {
+    "participant_id": 20,
+    "tournament_id": 4,
+    "chess_player_id": 46616543,
+    "place": 5
+  }
+]

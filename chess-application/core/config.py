@@ -1,33 +1,20 @@
-from pydantic import BaseModel
-from pydantic import PostgresDsn
-from pydantic_settings import BaseSettings, SettingsConfigDict
-
-class RunConfig(BaseModel):
-    host: str = "0.0.0.0"
-    port: int = 8000
-
-class APIPrefix(BaseModel):
-    prefix: str = "/api"
-
-class DatabaseConfig(BaseModel):
-    url: PostgresDsn = "postgresql+asyncpg://postgres:postgres@localhost:5432/postgres"
-    echo: bool = False
-    echo_pool: bool = False
-    pool_size: int = 5
-    max_overflow: int = 10
+from typing import Optional
+import os
+from pydantic import Field, Secret
+from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(
-        env_file=".env",
-        case_sensitive=False,
-        env_nested_delimiter="__",
-        env_prefix="CHESS__"
+    DATABASE_URL: Optional[str] = Field(
+        default=os.environ.get("DATABASE_URL"), env="DATABASE_URL"
     )
-    run: RunConfig = RunConfig()
-    api: APIPrefix = APIPrefix()
-    db: DatabaseConfig = DatabaseConfig(
-        url="postgresql+asyncpg://postgres:postgres@localhost:5432/postgres"
-    )
+    DEBUG: bool = Field(default=False, env="DEBUG")
+    run: Optional[dict] = Field(default=None)
+
+class DevelopmentSettings(Settings):
+    DEBUG: bool = True
+    run = Settings.run.copy(update={"host": "0.0.0.0", "port": 8000})
 
 settings = Settings()
-print(settings.db.url)
+
+if os.environ.get("ENVIRONMENT") == "development":
+    settings = DevelopmentSettings()
