@@ -1,15 +1,12 @@
-from sqlalchemy.orm import Mapped
-from sqlalchemy.testing.schema import mapped_column
-
-from .base import Base
 from sqlalchemy import Column, Integer, String
+from .base import Base
 
 class Tournament(Base):
-    __tablename__ = 'tournaments'
+    __tablename__ = "tournaments"
 
-    tournament_id: Mapped[int] = mapped_column(unique=True, primary_key=False)
-    tournament_name: Mapped[str] = mapped_column(nullable=False)
-    country: Mapped[str] = mapped_column(nullable=False)
-    city: Mapped[str] = mapped_column(nullable=False)
-    date: Mapped[str] = mapped_column(nullable=False)
-    qualification: Mapped[str] = mapped_column(nullable=False)
+    tournament_id = Column(Integer, primary_key=True, unique=True, autoincrement=False)
+    tournament_name = Column(String, nullable=False)
+    country = Column(String, nullable=False)
+    city = Column(String, nullable=False)
+    date = Column(String, nullable=False)
+    qualification = Column(String, nullable=False)

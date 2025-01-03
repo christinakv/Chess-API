@@ -1,17 +1,13 @@
-from more_itertools.recipes import unique
-from sqlalchemy.orm import Mapped
-from sqlalchemy.testing.schema import mapped_column
-
+from sqlalchemy import Column, Integer, String
 from .base import Base
 
 class ChessPlayer(Base):
-    __tablename__ = 'chess_players'
+    __tablename__ = "chess_players"
 
-    chess_player_id: Mapped[int] = mapped_column(unique=True, primary_key=False)
-    first_name: Mapped[str] = mapped_column(nullable=False)
-    last_name: Mapped[str] = mapped_column(nullable=False)
-    country: Mapped[str] = mapped_column(nullable=False)
-    world_rank: Mapped[str] = mapped_column(nullable=False)
-    rating: Mapped[int] = mapped_column(nullable=False)
-    title: Mapped[str] = mapped_column(nullable=False)
-
+    chess_player_id = Column(Integer, primary_key=True, unique=True, autoincrement=False)
+    first_name = Column(String, nullable=False)
+    last_name = Column(String, nullable=False)
+    country = Column(String, nullable=False)
+    world_rank = Column(Integer, nullable=False)
+    rating = Column(Integer, nullable=False)
+    title = Column(String, nullable=False)

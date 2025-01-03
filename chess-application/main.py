@@ -1,137 +1,178 @@
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, Depends, HTTPException, Query
 from fastapi.responses import FileResponse
 from typing import Optional
-import os
 import json
-from core.utils import json_to_dict_list
+import os
 
-# JSON file paths
-path_to_json_chess_players = os.path.join(os.path.dirname(__file__), 'core', 'models', 'chess_players.json')
-path_to_json_tournaments   = os.path.join(os.path.dirname(__file__), 'core', 'models', 'tournaments.json')
-path_to_json_participants  = os.path.join(os.path.dirname(__file__), 'core', 'models', 'participants.json')
+from sqlalchemy import select, func
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from core.models.db_helper import engine, AsyncSessionLocal, get_db_session
+from core.models.base import Base
+from core.models.chess_player import ChessPlayer
+from core.models.tournament import Tournament
+from core.models.participant import Participant
+
+BASE_DIR = os.path.dirname(__file__)
+PATH_PLAYERS = os.path.join(BASE_DIR, "core", "models", "chess_players.json")
+PATH_TOURNAMENTS = os.path.join(BASE_DIR, "core", "models", "tournaments.json")
+PATH_PARTICIPANTS = os.path.join(BASE_DIR, "core", "models", "participants.json")
 
 main_app = FastAPI()
+
+@main_app.on_event("startup")
+async def on_startup():
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
+    async_session = AsyncSessionLocal()
+    try:
+        result = await async_session.execute(select(func.count(ChessPlayer.chess_player_id)))
+        count = result.scalar()
+        if count == 0:
+            await populate_db(async_session)
+    finally:
+        await async_session.close()
+
+async def populate_db(db: AsyncSession):
+    def load_json(path):
+        with open(path, "r", encoding="utf-8") as f:
+            return json.load(f)
+
+    players_data = load_json(PATH_PLAYERS)
+    tournaments_data = load_json(PATH_TOURNAMENTS)
+    participants_data = load_json(PATH_PARTICIPANTS)
+
+    for p in players_data:
+        db.add(ChessPlayer(**p))
+
+    for t in tournaments_data:
+        db.add(Tournament(**t))
+
+    await db.flush()
+
+    for part in participants_data:
+        db.add(Participant(**part))
+
+    await db.commit()
+    print("Database populated from JSON files!")
 
 @main_app.get("/")
 def root():
     return FileResponse("../ui/index.html")
 
 @main_app.get("/chess_players")
-async def get_all_chess_players():
-    players = json_to_dict_list(path_to_json_chess_players)
+async def get_all_chess_players(db: AsyncSession = Depends(get_db_session)):
+    result = await db.execute(select(ChessPlayer))
+    players = result.scalars().all()
     if not players:
         raise HTTPException(status_code=404, detail="No chess players found.")
     return players
 
 @main_app.get("/chess_players/id/{player_id}")
-async def get_chess_player_by_id(player_id: int):
-    players = json_to_dict_list(path_to_json_chess_players)
-    # Find the player with matching ID
-    player = next((p for p in players if p["chess_player_id"] == player_id), None)
+async def get_chess_player_by_id(player_id: int, db: AsyncSession = Depends(get_db_session)):
+    result = await db.execute(select(ChessPlayer).where(ChessPlayer.chess_player_id == player_id))
+    player = result.scalars().first()
     if not player:
         raise HTTPException(status_code=404, detail="Player not found")
     return player
 
 @main_app.get("/chess_players/filtered")
 async def get_filtered_players(
+    db: AsyncSession = Depends(get_db_session),
     country: Optional[str] = None,
     rating_min: Optional[int] = None
 ):
-    players = json_to_dict_list(path_to_json_chess_players)
-    filtered = []
-    for p in players:
-        if (country is None or p["country"] == country) and \
-           (rating_min is None or p["rating"] >= rating_min):
-            filtered.append(p)
+    stmt = select(ChessPlayer)
+    if country:
+        stmt = stmt.where(ChessPlayer.country == country)
+    if rating_min:
+        stmt = stmt.where(ChessPlayer.rating >= rating_min)
 
+    result = await db.execute(stmt)
+    filtered = result.scalars().all()
     if not filtered:
         raise HTTPException(status_code=404, detail="No players found with the given filters.")
     return filtered
 
 @main_app.get("/chess_players/average_rating_by_country")
-async def get_average_rating_by_country():
-    players = json_to_dict_list(path_to_json_chess_players)
-    if not players:
+async def get_average_rating_by_country(db: AsyncSession = Depends(get_db_session)):
+    stmt = (
+        select(
+            ChessPlayer.country,
+            func.avg(ChessPlayer.rating).label("average_rating")
+        )
+        .group_by(ChessPlayer.country)
+    )
+    result = await db.execute(stmt)
+    data = result.all()
+    if not data:
         raise HTTPException(status_code=404, detail="No data available.")
-
-    from collections import defaultdict
-    country_to_ratings = defaultdict(list)
-
-    for p in players:
-        country_to_ratings[p["country"]].append(p["rating"])
-
-    result = []
-    for country, ratings in country_to_ratings.items():
-        avg_rating = sum(ratings) / len(ratings) if ratings else 0
-        result.append({"country": country, "average_rating": avg_rating})
-
-    return result
+    return [{"country": row[0], "average_rating": row[1]} for row in data]
 
 @main_app.get("/chess_players/sorted")
 async def get_sorted_players(
     sort_by: str = Query("rating", enum=["rating", "world_rank"]),
-    sort_order: str = Query("desc", enum=["asc", "desc"])
+    sort_order: str = Query("desc", enum=["asc", "desc"]),
+    db: AsyncSession = Depends(get_db_session)
 ):
-    players = json_to_dict_list(path_to_json_chess_players)
+    column = getattr(ChessPlayer, sort_by)
+    if sort_order == "desc":
+        column = column.desc()
+    stmt = select(ChessPlayer).order_by(column)
 
-    reverse_sort = (sort_order == "desc")
-    sorted_players = sorted(players, key=lambda p: p[sort_by], reverse=reverse_sort)
-
-    if not sorted_players:
+    result = await db.execute(stmt)
+    players = result.scalars().all()
+    if not players:
         raise HTTPException(status_code=404, detail="No players found.")
-    return sorted_players
+    return players
 
 @main_app.get("/chess_players/with_tournament/{player_id}")
-async def get_player_with_tournament(player_id: int):
-    players = json_to_dict_list(path_to_json_chess_players)
-    tournaments = json_to_dict_list(path_to_json_tournaments)
-    participants = json_to_dict_list(path_to_json_participants)
-
-    player = next((p for p in players if p["chess_player_id"] == player_id), None)
+async def get_player_with_tournament(player_id: int, db: AsyncSession = Depends(get_db_session)):
+    result = await db.execute(select(ChessPlayer).where(ChessPlayer.chess_player_id == player_id))
+    player = result.scalars().first()
     if not player:
         raise HTTPException(status_code=404, detail="Player not found")
 
-    player_tournament_ids = [
-        part["tournament_id"] for part in participants
-        if part["chess_player_id"] == player_id
-    ]
-    player_tournaments = [
-        t for t in tournaments
-        if t["tournament_id"] in player_tournament_ids
-    ]
+    part_stmt = select(Participant.tournament_id).where(Participant.chess_player_id == player_id)
+    part_result = await db.execute(part_stmt)
+    tournament_ids = [row[0] for row in part_result]
+
+    if not tournament_ids:
+        return {"player": player, "tournaments": []}
+
+    tour_stmt = select(Tournament).where(Tournament.tournament_id.in_(tournament_ids))
+    tour_result = await db.execute(tour_stmt)
+    tournaments = tour_result.scalars().all()
 
     return {
         "player": player,
-        "tournaments": player_tournaments
+        "tournaments": tournaments
     }
 
 @main_app.put("/chess_players/update_rating/{player_id}")
-async def update_player_rating(player_id: int, new_rating: int):
-    players = json_to_dict_list(path_to_json_chess_players)
-
-    player_index = None
-    for i, p in enumerate(players):
-        if p["chess_player_id"] == player_id:
-            player_index = i
-            break
-
-    if player_index is None:
+async def update_player_rating(
+    player_id: int,
+    new_rating: int,
+    db: AsyncSession = Depends(get_db_session)
+):
+    result = await db.execute(select(ChessPlayer).where(ChessPlayer.chess_player_id == player_id))
+    player = result.scalars().first()
+    if not player:
         raise HTTPException(status_code=404, detail="Player not found")
 
-    current_rating = players[player_index]["rating"]
-    if new_rating <= current_rating:
-        raise HTTPException(status_code=400, detail="New rating must be higher than the current rating.")
+    if new_rating <= player.rating:
+        raise HTTPException(status_code=400, detail="New rating must be higher than current rating.")
 
-    players[player_index]["rating"] = new_rating
-
-    with open(path_to_json_chess_players, 'w', encoding='utf-8') as f:
-        json.dump(players, f, indent=4)
+    player.rating = new_rating
+    await db.commit()
+    await db.refresh(player)
 
     return {
         "message": "Player's rating updated",
-        "player": players[player_index]
+        "player": player
     }
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(main_app, host="127.0.0.1", port=8000, reload=False)
+    uvicorn.run("main:main_app", host="127.0.0.1", port=8000, reload=True)
