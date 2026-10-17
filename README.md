@@ -44,7 +44,7 @@ A **FastAPI** application that uses **SQLAlchemy** and **PostgreSQL** to manage 
 
 1. **Clone** the repository:
 
-`git clone https://github.com/your-username/Chess-API.git`
+`git clone https://github.com/christinakv/Chess-API.git`
 
 `cd Chess-API`
 
